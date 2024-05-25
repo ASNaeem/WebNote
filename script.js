@@ -90,6 +90,8 @@ function addNote(noteText) {
         noteTextContainer.value = noteContent.textContent;
         document.getElementById('add-note').textContent = 'Update Note';
         editIndex = Array.from(document.querySelectorAll('.note')).indexOf(noteElement);
+        document.querySelector('#note-text').focus();
+
     });
 
     buttonsContainer.appendChild(editButton);
