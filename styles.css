@@ -1,0 +1,188 @@
+:root {
+    --background-color: #ffffff;
+    --text-color: #202124;
+    --container-background: #fff;
+    --container-shadow: rgba(0, 0, 0, 0.1);
+    --note-background: #fff;
+    --note-shadow: rgba(0, 0, 0, 0.12);
+    --note-hover-shadow: rgba(0, 0, 0, 0.16);
+    --button-background: #45d462;
+    --button-hover-background: #28a745;
+    --delete-button-background: #dc3545;
+    --delete-button-hover: #c82333;
+    --edit-button-background: #007bff;
+    --edit-button-hover: #0056b3;
+}
+
+[data-theme="dark"] {
+    --background-color: #202124;
+    --text-color: #e8eaed;
+    --container-background: #1e1e1e;
+    --container-shadow: rgba(255, 255, 255, 0.1);
+    --note-background: #2d2e30;
+    --note-shadow: rgba(255, 255, 255, 0.12);
+    --note-hover-shadow: rgba(255, 255, 255, 0.16);
+    --button-background: #3a3a3a;
+    --button-hover-background: #4a4a4a;
+    --delete-button-background: #e74c3c;
+    --delete-button-hover: #c0392b;
+    --edit-button-background: #3498db;
+    --edit-button-hover: #2980b9;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    position: relative;
+}
+.header h2 {
+    flex: 1;
+    text-align: center;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    margin: auto;
+    background: var(--container-background);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px var(--container-shadow);
+}
+
+.note-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    margin-right: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    background-color: var(--note-background);
+    color: var(--text-color);
+}
+
+button {
+    padding: 10px;
+    background-color: var(--button-background);
+    color: var(--text-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+button:hover {
+    background-color: var(--button-hover-background);
+}
+#add-note{
+    margin:auto;
+    margin-bottom: 10px;
+
+}
+.note .note-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.note button {
+    background-color: var(--delete-button-background);
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 5px 10px;
+    color: var(--text-color);
+    margin-left: 5px;
+}
+
+.note button:hover {
+    background-color: var(--delete-button-hover);
+}
+
+.note button.edit {
+    background-color: var(--edit-button-background);
+}
+
+.note button.edit:hover {
+    background-color: var(--edit-button-hover);
+}
+
+.notes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.note {
+    background: var(--note-background);
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px var(--note-shadow), 0 1px 2px var(--note-shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: box-shadow 0.3s ease;
+    min-height: 100px;
+}
+
+.note:hover {
+    box-shadow: 0 4px 8px var(--note-hover-shadow), 0 4px 8px var(--note-hover-shadow);
+}
+
+.note p {
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.note-buttons {
+    margin-top: 10px;
+}
+
+.note-buttons button {
+    flex: 1 1 auto;
+}
+
+#theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+}
+
+.light-mode-icon,
+.dark-mode-icon {
+    font-size: 24px; /* Adjust icon size */
+    color: #888; /* Set default color */
+    transition: color 0.3s ease; /* Smooth transition on color change */
+}
+
+#theme-toggle:hover .light-mode-icon{
+    color:#fff;
+}
+#theme-toggle:hover .dark-mode-icon {
+    color: #000; /* Change color on hover */
+}
