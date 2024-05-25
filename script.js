@@ -48,7 +48,6 @@ function addUpdate() {
 
     if (button.textContent === 'Add Note' && noteTexts.value.trim()) {
         addNote(noteTexts.value.trim());
-        document.getElementById('note-text').value = '';
         saveToLocal();
     } else if (button.textContent === 'Update Note') {
         const notes = document.querySelectorAll('.note p');
@@ -57,6 +56,7 @@ function addUpdate() {
         button.textContent = 'Add Note';
         saveToLocal();
     }
+    document.getElementById('note-text').value = '';
 }
 
 function addNote(noteText) {
