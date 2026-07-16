@@ -13,6 +13,7 @@ let activeEditNoteId = null;
 let inputIsPinned = false;
 let allNotes = []; // Client-side cache for real-time search
 const API_URL = '/api/notes';
+let useLocalStorageFallback = false;
 
 // Theme Management
 function setupTheme() {
@@ -192,16 +193,19 @@ async function loadNotes() {
     const response = await fetch(API_URL);
     if (!response.ok) throw new Error('Failed to load notes');
     allNotes = await response.json();
-    
-    // Clear search filter when reloading
-    const searchInput = document.getElementById('search-input');
-    if (searchInput) searchInput.value = '';
-
-    renderNotes(allNotes);
+    useLocalStorageFallback = false;
   } catch (error) {
-    console.error('Error fetching notes:', error);
-    alert('Could not connect to database.');
+    console.warn('Backend database API not available. Falling back to local browser storage:', error);
+    useLocalStorageFallback = true;
+    const localData = localStorage.getItem('webnotes');
+    allNotes = localData ? JSON.parse(localData) : [];
   }
+  
+  // Clear search filter when reloading
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) searchInput.value = '';
+
+  renderNotes(allNotes);
 }
 
 // Render list of notes (segregating Pinned and Others)
@@ -374,6 +378,12 @@ function formatNoteTimestamp(dateStr) {
 
 // Toggle Pin Status via API
 async function togglePinStatus(noteId, newPinStatus) {
+  if (useLocalStorageFallback) {
+    allNotes = allNotes.map(n => n.id === noteId ? { ...n, isPinned: newPinStatus } : n);
+    saveToLocalStorage();
+    renderNotes(allNotes);
+    return;
+  }
   try {
     const response = await fetch(`${API_URL}/${noteId}`, {
       method: 'PUT',
@@ -468,9 +478,15 @@ function createDeleteButton(noteId) {
   deleteBtn.addEventListener('click', async (e) => {
     e.stopPropagation();
     if (confirm('Delete this note permanently?')) {
-      const deleted = await deleteNoteOnServer(noteId);
-      if (deleted) {
-        loadNotes();
+      if (useLocalStorageFallback) {
+        allNotes = allNotes.filter(n => n.id !== noteId);
+        saveToLocalStorage();
+        renderNotes(allNotes);
+      } else {
+        const deleted = await deleteNoteOnServer(noteId);
+        if (deleted) {
+          loadNotes();
+        }
       }
     }
   });
@@ -508,6 +524,36 @@ async function handleAddOrUpdateNote() {
   // Get color selection
   const selectedColorRadio = document.querySelector('input[name="note-color"]:checked');
   const color = selectedColorRadio ? selectedColorRadio.value : 'default';
+
+  if (useLocalStorageFallback) {
+    if (activeEditNoteId) {
+      // Update Mode
+      allNotes = allNotes.map(n => n.id === activeEditNoteId ? { 
+        ...n, 
+        text, 
+        isPinned: inputIsPinned, 
+        color,
+        updatedAt: new Date().toISOString() 
+      } : n);
+      activeEditNoteId = null;
+      addNoteButton.textContent = 'Add Note';
+    } else {
+      // Add Mode
+      const newNote = {
+        id: Date.now().toString(),
+        text,
+        isPinned: inputIsPinned,
+        color,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      allNotes.unshift(newNote);
+    }
+    saveToLocalStorage();
+    resetCreateCardState(noteTextInput, pinToggleBtn);
+    renderNotes(allNotes);
+    return;
+  }
 
   if (activeEditNoteId) {
     // Update Mode
@@ -584,6 +630,18 @@ async function handleCheckboxToggle(note, lineIndex, isChecked) {
     lines[lineIndex] = `- [${checkChar}] ${match[2]}`;
     const newText = lines.join('\n');
 
+    if (useLocalStorageFallback) {
+      note.text = newText;
+      const cachedNote = allNotes.find(n => n.id === note.id);
+      if (cachedNote) {
+        cachedNote.text = newText;
+        cachedNote.updatedAt = new Date().toISOString();
+      }
+      saveToLocalStorage();
+      renderNotes(allNotes);
+      return;
+    }
+
     try {
       const response = await fetch(`${API_URL}/${note.id}`, {
         method: 'PUT',
@@ -606,4 +664,8 @@ async function handleCheckboxToggle(note, lineIndex, isChecked) {
       loadNotes(); // Reload to rollback UI state
     }
   }
+}
+
+function saveToLocalStorage() {
+  localStorage.setItem('webnotes', JSON.stringify(allNotes));
 }
