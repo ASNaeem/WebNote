@@ -67,6 +67,10 @@
   --accent-hover: #7c3aed;
   --accent-contrast: #ffffff;
 
+  /* Buttons */
+  --btn-secondary: #334155;
+  --btn-secondary-hover: #475569;
+
   /* Note Card Dark Palette */
   --color-card-default: #1e293b;
   --color-card-blue: #1e3a8a;
