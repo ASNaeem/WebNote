@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebNote — Personal Note Manager</title>
+    <!-- Google Fonts Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="app-header">
+            <div class="logo-area">
+                <i class="fa-solid fa-note-sticky logo-icon"></i>
+                <h1>WebNote</h1>
+            </div>
+            
+            <!-- Real-time search bar -->
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="search" id="search-input" placeholder="Search notes..." autocomplete="off">
+            </div>
+
+            <!-- Header Controls -->
+            <div class="header-controls">
+                <button id="layout-toggle" class="control-btn" title="Toggle Layout (Grid/List)">
+                    <i class="fa-solid fa-list-ul list-icon"></i>
+                    <i class="fa-solid fa-table-cells-large grid-icon"></i>
+                </button>
+                <button id="theme-toggle" class="control-btn" title="Toggle Dark/Light Mode">
+                    <i class="fa-solid fa-sun light-mode-icon"></i>
+                    <i class="fa-solid fa-moon dark-mode-icon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="workspace">
+            <!-- Note Creation Card -->
+            <section class="input-section">
+                <div class="note-input-card">
+                    <div class="input-header">
+                        <input type="text" id="note-title-placeholder" placeholder="Take a note..." disabled style="display:none;">
+                    </div>
+                    <textarea id="note-text" placeholder="Enter your note here..." maxlength="250"></textarea>
+                    
+                    <div class="input-footer">
+                        <!-- Color Selector -->
+                        <div class="color-selector">
+                            <label class="color-option color-default" title="Default">
+                                <input type="radio" name="note-color" value="default" checked>
+                                <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                            </label>
+                            <label class="color-option color-blue" title="Blue">
+                                <input type="radio" name="note-color" value="blue">
+                                <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                            </label>
+                            <label class="color-option color-teal" title="Teal">
+                                <input type="radio" name="note-color" value="teal">
+                                <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                            </label>
+                            <label class="color-option color-green" title="Green">
+                                <input type="radio" name="note-color" value="green">
+                                <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                            </label>
+                            <label class="color-option color-yellow" title="Yellow">
+                                <input type="radio" name="note-color" value="yellow">
+                                <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                            </label>
+                            <label class="color-option color-purple" title="Purple">
+                                <input type="radio" name="note-color" value="purple">
+                                <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                            </label>
+                        </div>
+
+                        <!-- Actions Area -->
+                        <div class="action-options">
+                            <button id="checklist-helper-btn" class="action-icon-btn" title="Insert Todo Checkbox">
+                                <i class="fa-regular fa-square-check"></i>
+                            </button>
+                            <button id="pin-toggle-btn" class="action-icon-btn" title="Pin Note to Top">
+                                <i class="fa-solid fa-thumbtack"></i>
+                            </button>
+                            <span id="char-counter" class="char-counter">0 / 250</span>
+                            <button id="add-note" class="submit-note-btn">Add Note</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notes List Section -->
+            <section class="notes-section">
+                <!-- Pinned Notes Heading (hidden if no pinned notes) -->
+                <div id="pinned-heading" class="section-title" style="display: none;">
+                    <i class="fa-solid fa-thumbtack"></i> Pinned
+                </div>
+                <div id="pinned-notes-container" class="notes-container grid-view"></div>
+
+                <!-- Regular Notes Heading -->
+                <div id="notes-heading" class="section-title" style="display: none;">
+                    Others
+                </div>
+                <div id="notes-container" class="notes-container grid-view"></div>
+
+                <!-- Empty State Message -->
+                <div id="empty-state" class="empty-state">
+                    <i class="fa-regular fa-clipboard empty-icon"></i>
+                    <p>No notes here yet. Create your first note above!</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
